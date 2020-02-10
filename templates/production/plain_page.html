@@ -207,6 +207,7 @@ socket.on('connect', function(){
         });
 
         $('.room-chat').hide();
+        console.log('user connected: '+ usr );
         console.log("chaty schovany");
     })
 
@@ -226,7 +227,7 @@ socket.on('my response', function(msg){
 
 
 socket.on("user_connected", function(user){
-    console.log('user_connected');
+    console.log('user_connected: ' + user);
   $("<li><a class='active_user' onclick='openChat(this.id); this.onclick=null' id='" + user[0] + "'><i class='fa fa-user'></i> " + user[0] + " </a></li>").appendTo($(".users"));
 
   $("<div class='clearfix'></div><div class='row room-chat room-chat-" + user[0] + "'><div class='col-md-12 col-sm-12'><div class='x_panel'><div class='x_content'><h2>" + user[0] + "</h2><div class='" + user[0] + "private-message-input'><div class='wrap'><input type='text' placeholder='Napsat...' /><button onclick=newPrivateMessage(this.id) id='" + user[0] + "_in' class='" + user[0] + "submit_pm'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div><ul class='" + user[0] + "'></ul></div></div></div></div>").appendTo($(".content"));
