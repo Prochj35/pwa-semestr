@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="/static/style.css" type="text/css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+	</head>
+	<body style="background-color: black">
+		{% block body %}
+		{% if session['logged_in'] %}
+		<p>You're logged in already!</p>
+		{% else %}
+		
+		
+		<form id="lgnfrm" action="/login" method="POST">
+			<div class="login">
+				<div class="login-screen">
+					<div class="app-title">
+						<h1>Login</h1>
+					</div>
+		
+					<div class="login-form">
+						<div class="control-group">
+						<input type="text" id="user" class="login-field" value="" placeholder="username" name="username">
+						<label class="login-field-icon fui-user" for="login-name"></label>
+						</div>
+		
+						<div class="control-group">
+						<input type="password" class="login-field" value="" placeholder="password" name="password">
+						<label class="login-field-icon fui-lock" for="login-pass"></label>
+						</div>
+		
+						<input type="submit" value="Log in" class="btn btn-primary btn-large btn-block" >
+						<br>
+						<a href="/new" style="text-decoration: none"><input id="login_btn" type="button" onclick="" value="Register" class="btn-reg btn-primary btn-large btn-block" ></a>
+						<br>
+					</div>
+				</div>
+			</div>
+		</form>
+		
+
+		<script>
+			var sckt = io.connect('http://' + document.domain + ":" + location.port);
+
+			sckt.on('connect', function(){
+				$('#lgnfrm').on('submit', function(){
+					sessionStorage.setItem('user', $('#user').val());
+					sckt.emit('login', $('#user').val());
+				});  
+			})
+		</script>
+
+		{% endif %}
+		{% endblock %}
+	</body>
+</html>

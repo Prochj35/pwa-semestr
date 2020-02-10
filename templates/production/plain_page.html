@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PWA CHAT</title>
+    <script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script><meta charset='UTF-8'><meta name="robots" content="noindex"><link rel="shortcut icon" type="image/x-icon" href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" /><link rel="mask-icon" type="" href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" /><link rel="canonical" href="https://codepen.io/emilcarlsson/pen/ZOQZaV?limit=all&page=74&q=contact+" />
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+
+<script src="https://use.typekit.net/hoy3lrg.js"></script>
+<script>try{Typekit.load({ async: true });}catch(e){}</script>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+
+
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{{ url_for('static', filename='vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{{ url_for('static', filename='vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+
+
+
+<link href="{{ url_for('static', filename='vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
+
+<link href="{{ url_for('static', filename='vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
+
+<link href="{{ url_for('static', filename='vendors/pnotify/dist/pnotify.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='vendors/pnotify/dist/pnotify.buttons.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='vendors/pnotify/dist/pnotify.nonblock.css') }}" rel="stylesheet">
+
+
+    <!-- Custom Theme Style -->
+    <link href="{{ url_for('static', filename='build/css/custom.min.css') }}" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="{{ url_for('static', filename='images/img.jpg') }}" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2 class="username"></h2>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                <h3>Uživatelé</h3>
+                <ul class="nav side-menu users">
+                      {% for user in active_users %}
+                  <li><a class="active_user" onclick="openChat(this.id); this.onclick=null" id="{{ user }}" ><i class="fa fa-user"></i> {{ user }} </a></li>
+                      {% endfor %}
+                </ul>
+              </div>
+              <div class="menu_section">
+                <h3>Skupiny</h3>
+                <ul class="nav side-menu">
+
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <div class="sidebar-footer hidden-small">
+              <a data-toggle="tooltip" data-placement="top" title="" href="/logout" data-original-title="Logout">
+              <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col content" role="main">
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Chat</h3>
+              </div>
+
+
+              </div>
+            </div>
+{% for user in active_users %}
+            <div class="clearfix"></div>
+
+            <div class="row room-chat room-chat-{{ user }}">
+              <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                  <div class="x_content">
+                      <h2>{{ user }}</h2>
+                       <div class="{{ user }}private-message-input">
+                                  <div class="wrap">
+                                    <input type="text" placeholder="Napsat..." />
+                                    <button onclick=newPrivateMessage(this.id) id="{{ user }}_in" class="{{ user }}submit_pm"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                                  </div>
+                       </div>
+                        <ul class="{{ user }}">
+
+                        </ul>
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+ {% endfor %}
+
+
+          </div>
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='vendors/jquery/dist/jquery.min.js') }}"></script>
+    <!-- Bootstrap -->
+   <script src="{{ url_for('static', filename='vendors/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- FastClick -->
+    <script src="{{ url_for('static', filename='vendors/fastclick/lib/fastclick.js') }}"></script>
+    <!-- NProgress -->
+    <script src="{{ url_for('static', filename='vendors/nprogress/nprogress.js') }}"></script>
+    
+    <!-- Custom Theme Scripts -->
+    <script src="{{ url_for('static', filename='build/js/custom.min.js') }}"></script>
+    <script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'>
+</script><script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+
+    <!-- bootstrap-progressbar -->
+    <script src="{{ url_for('static', filename='vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
+    <!-- iCheck -->
+    <script src="{{ url_for('static', filename='vendors/iCheck/icheck.min.js') }}"></script>
+    <!-- PNotify -->
+    <script src="{{ url_for('static', filename='vendors/pnotify/dist/pnotify.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+
+    <!-- Custom Theme Scripts -->
+
+<script >$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+
+var socket = io.connect('http://' + document.domain + ":" + location.port);
+
+socket.on('connect', function(){
+        socket.emit('my event', {
+            data: 'User Connected'
+        })
+
+        $('#myTab a:first').addClass('active');
+        $('#myTabContent div:first').addClass('show active');
+
+        $('.submit').click(function() {
+            newMessage();
+        });
+
+        var usr = sessionStorage.getItem("user");
+        $('.username').text(usr);
+
+        $(window).on('keydown', function(e) {
+            if (e.which == 13) {
+                newMessage();
+                return false;
+            }
+        });
+
+        $("#logout_btn").on("click", function(){
+          var usr = sessionStorage.getItem("user");
+          socket.emit("user_logout", {
+              data: usr
+            });
+        });
+
+        $('.room-chat').hide();
+        console.log("chaty schovany");
+    })
+
+socket.on('my response', function(msg){
+        console.log('my?response');
+        console.log(msg)
+        if(typeof msg.user_name !== 'undefined'){
+            if(msg.user_name != sessionStorage.getItem('user')){
+              $('<li class="sent"><p id="username">' + msg.user_name + '</p><p>' + msg.message + '</p></li>').appendTo($('.messages ul'));
+            }
+            else{
+              $('<li class="replies"><p id="username">' + msg.user_name + '</p><p>' + msg.message + '</p></li>').appendTo($('.messages ul'));
+            }
+        }
+    })
+
+
+
+socket.on("user_connected", function(user){
+    console.log('user_connected');
+  $("<li><a class='active_user' onclick='openChat(this.id); this.onclick=null' id='" + user[0] + "'><i class='fa fa-user'></i> " + user[0] + " </a></li>").appendTo($(".users"));
+
+  $("<div class='clearfix'></div><div class='row room-chat room-chat-" + user[0] + "'><div class='col-md-12 col-sm-12'><div class='x_panel'><div class='x_content'><h2>" + user[0] + "</h2><div class='" + user[0] + "private-message-input'><div class='wrap'><input type='text' placeholder='Napsat...' /><button onclick=newPrivateMessage(this.id) id='" + user[0] + "_in' class='" + user[0] + "submit_pm'><i class='fa fa-paper-plane' aria-hidden='true'></i></button></div></div><ul class='" + user[0] + "'></ul></div></div></div></div>").appendTo($(".content"));
+
+   $(".room-chat-" + user[0]).hide();
+   console.log('room chat ' + user[0] + ' schovan');
+});
+
+
+socket.on("handle_pm", function(data){
+    console.log('handle_pm');
+  console.log('zprava prijata');
+  var t_user = "";
+  if(sessionStorage.getItem("user") == data["to"]){
+    $('<li>' + data["from"] + ': ' +data["message"]+'</li>').appendTo($("."+data["from"]));
+  }
+})
+
+socket.on("user_loggedout", function(user){
+  document.getElementById(user).remove();
+  document.getElementById(user+"_chat").remove();
+})
+
+function openChat(id){
+       $('.room-chat-'+id).toggle();
+
+       console.log(" kliknuto na " + id);
+
+}
+
+function newPrivateMessage(user_to){
+
+    user_to = user_to.split("_", 1)[0];
+
+    console.log("message sent to " + user_to);
+    message = $("."+user_to+"private-message-input input").val();
+
+    console.log("message: " + message);
+    user = sessionStorage.getItem('user');
+
+    to =  user_to
+    if($.trim(message) == '') {
+        return false;
+    }
+    $("."+user_to+"private-message-input input").val(null);
+    $("."+user_to+"private-messages").animate({ scrollTop: $(document).height() }, "fast");
+    socket.emit('private_message', {
+        user_name : user,
+        user_to : to,
+        message : message
+    });
+
+    $('<li>' + user + ': ' + message +'</li>').appendTo($("."+to));
+    $('.'+ user_to +'submit_pm').unbind()
+}
+
+
+</script>
+  </body>
+</html>
