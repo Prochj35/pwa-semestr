@@ -175,7 +175,7 @@
 
 <script >$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
-var socket = io.connect('https://semestr.herokuapp.com/');
+var socket = io.connect('http://' + document.domain + ":" + location.port);
 
 socket.on('connect', function(){
         socket.emit('my event', {
@@ -247,11 +247,9 @@ socket.on("handle_pm", function(data){
 })
 
 socket.on("user_loggedout", function(user){
-    alert('user');
-    $('.chat-room-'+user).remove();
-
-  document.getElementById(user).remove();
-  document.getElementById(user+"_chat").remove();
+    console.log(user + ' logout');
+    $('.room-chat-'+user).remove();
+    document.getElementById(user).remove();
 })
 
 function openChat(id){

@@ -59,32 +59,6 @@ def sessions():
 #    return render_template("chat-old.html", active_users = user_session_ids)
 
 
-@socketio.on('login')
-def store_session_id(username):
-    print(username + ":" + request.sid)
-    user_session_ids[username] = request.sid
-    user=[username, request.sid]
-    socketio.emit("user_connected", user)
-    return home()
-
-
-@socketio.on('private_chat')
-def create_private_chat(data):
-    user_from = data["from"]
-    user_to = data["to"]
-    print("private chat: " + user_from + " and " + user_to)
-    print("user_to id: " + user_session_ids[user_to])
-    socketio.emit("create_chat", {"u_from": user_from, "u_to": user_to})
-
-
-@socketio.on('private_message')
-def handle_private_message(data):
-    user_from = data["user_name"]
-    user_to = data["user_to"]
-    message = data["message"]
-    print("from: " + user_from + " to: " + user_to + " - " + message)
-    socketio.emit("handle_pm", {"from":user_from, "to":user_to, "message":message})
-
 
 @app.route('/login', methods=['POST'])
 def process_login():
@@ -121,6 +95,33 @@ def handle_user_logout(user):
     print("Received: " + str(user["data"]))
     user_session_ids.pop(str(user["data"]))
     socketio.emit("user_loggedout", str(user["data"]))
+
+@socketio.on('login')
+def store_session_id(username):
+    print(username + ":" + request.sid)
+    user_session_ids[username] = request.sid
+    user=[username, request.sid]
+    socketio.emit("user_connected", user)
+    return home()
+
+
+@socketio.on('private_chat')
+def create_private_chat(data):
+    user_from = data["from"]
+    user_to = data["to"]
+    print("private chat: " + user_from + " and " + user_to)
+    print("user_to id: " + user_session_ids[user_to])
+    socketio.emit("create_chat", {"u_from": user_from, "u_to": user_to})
+
+
+@socketio.on('private_message')
+def handle_private_message(data):
+    user_from = data["user_name"]
+    user_to = data["user_to"]
+    message = data["message"]
+    print("from: " + user_from + " to: " + user_to + " - " + message)
+    socketio.emit("handle_pm", {"from":user_from, "to":user_to, "message":message})
+
 
 if __name__ == "__main__":
     from os import environ
